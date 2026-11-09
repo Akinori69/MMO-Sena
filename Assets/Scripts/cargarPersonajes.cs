@@ -7,6 +7,9 @@ using TMPro;
 
 public class cargarPersonajes : MonoBehaviour
 {
+    //elementos del prefab del boton personaje
+    public GameObject botonPersonajePrefab;
+    public Transform contenedorPersonajes;
     public void Start()
     {
         Debug.Log("CargarPersonajes: Start() ejecutado");
@@ -38,17 +41,34 @@ public class cargarPersonajes : MonoBehaviour
 
             // Procesa la respuesta del servidor
             string response = www.downloadHandler.text;
-            string[] responseData = response.Split('\t');
-            Debug.Log("CargarPersonajes: Respuesta PHP = " + response);
 
-            if (responseData.Length > 1 && responseData[0] == "0")
+            PersonajesResponse datos = JsonUtility.FromJson<PersonajesResponse>(response);
+
+            if (datos.status == 0)
             {
-                Debug.Log("Character load successful");
+                Debug.Log("Personajes recibidos: " + datos.personajes.Length);
 
-                DBManager.personajeSeleccionado = responseData[1];
-                // Carga la escena "juego"
-                //SceneManager.LoadScene("juego");
+                CrearBotonesPersonajes(datos.personajes);
             }
+            else
+            {
+                Debug.LogError("Error al cargar personajes: " + datos);
+            }
+        }
+    }
+    //metodo para crear los botones de los personajes en la UI
+    void CrearBotonesPersonajes(PersonajeData[] personajes)
+    {
+        foreach (PersonajeData personaje in personajes)
+        {
+            GameObject nuevoBoton = Instantiate(
+                botonPersonajePrefab,
+                contenedorPersonajes
+            );
+
+            PersonajeUI personajeUI = nuevoBoton.GetComponent<PersonajeUI>();
+
+            personajeUI.Configurar(personaje);
         }
     }
 }

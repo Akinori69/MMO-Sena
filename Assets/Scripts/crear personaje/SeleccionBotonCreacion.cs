@@ -6,6 +6,10 @@ public class SeleccionBotonCreacion : MonoBehaviour
 {
     private const int Opciones = 9;
 
+    //este script guarda un indice, el cual corresponde 
+    // entre 0 y 8 que se asocian con 1 hasta 9 como clases en php
+    //en php se comprueba el indice y lo asocia a una clase para los valores basicos
+    public int ClaseSeleccionada { get; private set; } = 0;
     [SerializeField] private Button[] botones = new Button[Opciones];
     [SerializeField] private TMP_Text[] textos = new TMP_Text[Opciones];
     [SerializeField] private Image[] sprites = new Image[Opciones];
@@ -33,6 +37,8 @@ public class SeleccionBotonCreacion : MonoBehaviour
             Debug.LogWarning($"El indice {indice} no corresponde a una opcion valida.", this);
             return;
         }
+        //asignando indice para enviar a php
+        ClaseSeleccionada = indice;
 
         ActualizarVisibilidad(textos, indice);
         ActualizarVisibilidad(sprites, indice);

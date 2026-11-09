@@ -2518,6 +2518,7 @@ GameObject:
   - component: {fileID: 692068147}
   - component: {fileID: 692068146}
   - component: {fileID: 692068150}
+  - component: {fileID: 692068151}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2683,6 +2684,20 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &692068151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692068145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5a261a83d6522d47b2b13e53e56554e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrearPersonaje
+  nombreInput: {fileID: 1673398822}
+  seleccionBoton: {fileID: 692068150}
 --- !u!1 &718834405
 GameObject:
   m_ObjectHideFlags: 0
@@ -4388,7 +4403,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1357939063}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 692068151}
+        m_TargetAssemblyTypeName: CrearPersonaje, Assembly-CSharp
+        m_MethodName: Crear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1357939063
 MonoBehaviour:
   m_ObjectHideFlags: 0
