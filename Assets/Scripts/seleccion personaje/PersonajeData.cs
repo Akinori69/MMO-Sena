@@ -1,11 +1,9 @@
 using System;
 
-//script para gestionar los botones que despliega la 
-// interfaz como prefabs sobre los personajes del jugador
-
 [Serializable]
 public class PersonajeData
 {
+    public int id;
     public string nombre;
     public string clase;
     public string nivel;
@@ -18,3 +16,9 @@ public class PersonajesResponse
     public PersonajeData[] personajes;
 }
 
+[Serializable]
+public class EliminarPersonajeResponse
+{
+    public int status;
+    public string mensaje;
+}

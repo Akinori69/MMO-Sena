@@ -1,21 +1,24 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
-using UnityEngine.UI;
-using TMPro;
 
-public class cargarPersonajes : MonoBehaviour
+public class CargarPersonajes : MonoBehaviour
 {
-    //elementos del prefab del boton personaje
+    // Elementos del prefab del botón personaje
     public GameObject botonPersonajePrefab;
     public Transform contenedorPersonajes;
+
+    // Controlador de selección
+    public GestionPersonajes gestionPersonajes;
+
     public void Start()
     {
         Debug.Log("CargarPersonajes: Start() ejecutado");
         Debug.Log("CargarPersonajes: Usuario en DBManager = [" + DBManager.username + "]");
+
         CallLoadCharacter();
     }
+
     public void CallLoadCharacter()
     {
         StartCoroutine(LoadingPlayerCharacter());
@@ -24,27 +27,28 @@ public class cargarPersonajes : MonoBehaviour
     IEnumerator LoadingPlayerCharacter()
     {
         WWWForm form = new WWWForm();
+
         string username = DBManager.username;
 
         form.AddField("username", username);
 
-        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/consultaPersonaje.php", form))
+        using (UnityWebRequest www = UnityWebRequest.Post(
+            "http://localhost/sqlconnect/consultaPersonaje.php", form))
         {
             yield return www.SendWebRequest();
 
-            // Comprueba si la solicitud fue exitosa
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("Character load request failed: " + www.error);
                 yield break;
             }
 
-            // Procesa la respuesta del servidor
             string response = www.downloadHandler.text;
 
-            PersonajesResponse datos = JsonUtility.FromJson<PersonajesResponse>(response);
+            PersonajesResponse datos =
+                JsonUtility.FromJson<PersonajesResponse>(response);
 
-            if (datos.status == 0)
+            if (datos != null && datos.status == 0)
             {
                 Debug.Log("Personajes recibidos: " + datos.personajes.Length);
 
@@ -52,11 +56,12 @@ public class cargarPersonajes : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Error al cargar personajes: " + datos);
+                Debug.LogError("Error al cargar personajes: " + response);
             }
         }
     }
-    //metodo para crear los botones de los personajes en la UI
+
+    // Crear los botones de los personajes en la UI
     void CrearBotonesPersonajes(PersonajeData[] personajes)
     {
         foreach (PersonajeData personaje in personajes)
@@ -66,9 +71,10 @@ public class cargarPersonajes : MonoBehaviour
                 contenedorPersonajes
             );
 
-            PersonajeUI personajeUI = nuevoBoton.GetComponent<PersonajeUI>();
+            PersonajeUI personajeUI =
+                nuevoBoton.GetComponent<PersonajeUI>();
 
-            personajeUI.Configurar(personaje);
+            personajeUI.Configurar(personaje, gestionPersonajes);
         }
     }
 }

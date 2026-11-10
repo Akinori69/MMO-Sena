@@ -54,7 +54,6 @@ public class Login : MonoBehaviour
                 Debug.Log("User login successful");
 
                 DBManager.username = nameField.text;
-                DBManager.dinero = responseData[1];
                 // Carga la escena "elección personaje"
                 SceneManager.LoadScene("elección personaje");
             }
