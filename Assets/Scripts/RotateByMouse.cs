@@ -3,37 +3,61 @@ using UnityEngine.InputSystem;
 
 public class RotateByMouse : MonoBehaviour
 {
-    public float speed = 10f; // Velocidad de rotación
-    private bool isRotating = false; // Bandera para controlar si se está rotando
+    // Velocidad con la que rota el objeto al desplazar el ratón.
+    public float speed = 10f;
+
+    // Indica si el usuario mantiene activa la interacción de rotación.
+    private bool isRotating = false;
+
+    // Almacena la posición horizontal anterior del ratón para calcular su desplazamiento.
     private float starMousePosition;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
+    // Se ejecuta en cada frame para detectar la interacción del ratón
+    // y aplicar la rotación correspondiente al objeto.
     // Update is called once per frame
     void Update()
     {
+        // Comprueba que exista un dispositivo de ratón conectado.
         if (Mouse.current == null)
         {
-            //si no hay un ratón conectado, no hacer nada
+            // Si no hay un ratón conectado, no realizar ninguna operación.
             return;
         }
 
+        // Recupera la posición actual del cursor en la pantalla.
         Vector2 mousePosition = Mouse.current.position.ReadValue();
 
-        if (Mouse.current.leftButton.wasPressedThisFrame) // Detecta si se presiona el botón izquierdo del ratón
+        // Detecta si se presiona el botón izquierdo del ratón por primera vez.
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            isRotating = true; // Activa la rotación
-            starMousePosition = mousePosition.x; // Guarda la posición inicial del ratón
+            // Activa el estado de rotación y registra la posición horizontal inicial.
+            isRotating = true;
+            starMousePosition = mousePosition.x;
         }
-        else if (Mouse.current.leftButton.wasReleasedThisFrame) // Detecta si se suelta el botón izquierdo del ratón
+        // Detecta cuándo se libera el botón izquierdo para finalizar la interacción.
+        else if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
-            isRotating = false; // Desactiva la rotación
+            // Desactiva la rotación hasta que se produzca una nueva pulsación.
+            isRotating = false;
         }
-        else if (isRotating) // Si se está rotando
+        // Si el usuario mantiene activa la rotación, calcula el desplazamiento del cursor.
+        else if (isRotating)
         {
-            float mouseDelta = mousePosition.x - starMousePosition; // Calcula el cambio del ratón
-            float rotationAmount = mouseDelta * speed * Time.deltaTime; // Calcula la cantidad de rotación basada en el cambio del ratón y la velocidad
-            transform.Rotate(Vector3.down, rotationAmount); // Aplica la rotación al objeto alrededor del eje Y
-            starMousePosition = mousePosition.x; // Actualiza la posición inicial del ratón para la siguiente iteración
+            // Calcula la diferencia horizontal entre la posición actual y la anterior del ratón.
+            float mouseDelta = mousePosition.x - starMousePosition;
+
+            // Convierte el desplazamiento del ratón en un valor de rotación,
+            // teniendo en cuenta la velocidad configurada y el tiempo entre frames.
+            float rotationAmount = mouseDelta * speed * Time.deltaTime;
+
+            // Aplica la rotación al objeto alrededor de su eje Y local,
+            // utilizando el vector descendente como dirección de giro.
+            transform.Rotate(Vector3.down, rotationAmount);
+
+            // Actualiza la posición de referencia para calcular el desplazamiento del siguiente frame.
+            starMousePosition = mousePosition.x;
         }
     }
 }
